@@ -254,7 +254,7 @@ Bu kategorilerde lisans daha sıkı denetlenir. Lisanssız alıcıya verme
 
 ## Akar Hurda — Tüm Lisanslarımız Şeffaf
 
-Tüm yasal belgelerimizi `/sertifikalar` sayfamızda paylaşıyoruz.
+Tüm yasal belgelerimizi /sertifikalar sayfamızda paylaşıyoruz.
 Adresten alım sırasında lisanslı aracımız ve resmi fatura ile
 yasal güvencenizi sağlıyoruz.
 
