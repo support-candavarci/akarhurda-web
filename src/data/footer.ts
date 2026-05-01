@@ -18,12 +18,28 @@ export const footerGroups: FooterLinkGroup[] = [
     ],
   },
   {
+    title: "Bölgeler",
+    links: [
+      { label: "Gebze Hurdacı", href: "/hizmet-bolgesi/gebze" },
+      { label: "Darıca Hurdacı", href: "/hizmet-bolgesi/darica" },
+      { label: "Çayırova Hurdacı", href: "/hizmet-bolgesi/cayirova" },
+      { label: "Dilovası Hurdacı", href: "/hizmet-bolgesi/dilovasi" },
+      { label: "Pendik Hurdacı", href: "/hizmet-bolgesi/pendik" },
+      { label: "Tuzla Hurdacı", href: "/hizmet-bolgesi/tuzla" },
+      { label: "Kocaeli Hurdacı", href: "/hizmet-bolgesi/kocaeli" },
+      { label: "Tüm Bölgeler", href: "/hizmet-bolgesi" },
+    ],
+  },
+  {
     title: "Kurumsal",
     links: [
       { label: "Hakkımızda", href: "/hakkimizda" },
-      { label: "Hizmet Bölgesi", href: "/hizmet-bolgesi" },
+      { label: "Sertifikalar", href: "/sertifikalar" },
+      { label: "Hurda Fiyatları", href: "/hurda-fiyatlari" },
+      { label: "Sık Sorulan Sorular", href: "/sss" },
       { label: "Blog", href: "/blog" },
       { label: "İletişim", href: "/iletisim" },
+      { label: "Teklif Al", href: "/teklif-al" },
     ],
   },
 ];
@@ -38,5 +54,6 @@ export const footerAbout = {
 export const footerLegal: { label: string; href: string }[] = [
   { label: "Gizlilik Politikası", href: "/gizlilik-politikasi" },
   { label: "KVKK", href: "/kvkk" },
+  { label: "Çerez Politikası", href: "/cerez-politikasi" },
   { label: "Kullanım Şartları", href: "/kullanim-sartlari" },
 ];
