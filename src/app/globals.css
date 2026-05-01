@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+:root {
+  /* Akar Hurda brand palette — slate (industrial) + orange-600 (copper) */
+  --color-primary: #1e293b;
+  --color-primary-light: #475569;
+  --color-primary-dark: #0f172a;
+  --color-accent: #ea580c;
+  --color-accent-hover: #c2410c;
+  --color-accent-light: #fb923c;
+  --color-secondary: #475569;
+  --color-dark: #0a0a0a;
+  --color-light: #f8fafc;
+  --color-whatsapp: #25D366;
+  --color-whatsapp-hover: #1DA851;
+}
+
+@theme inline {
+  --color-primary: var(--color-primary);
+  --color-primary-light: var(--color-primary-light);
+  --color-primary-dark: var(--color-primary-dark);
+  --color-accent: var(--color-accent);
+  --color-accent-hover: var(--color-accent-hover);
+  --color-accent-light: var(--color-accent-light);
+  --color-secondary: var(--color-secondary);
+  --color-dark: var(--color-dark);
+  --color-light: var(--color-light);
+  --color-whatsapp: var(--color-whatsapp);
+  --color-whatsapp-hover: var(--color-whatsapp-hover);
+  --font-sans: var(--font-geist-sans);
+}
+
+body {
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  color: var(--color-dark);
+  background: #ffffff;
+}
+
+html {
+  scroll-behavior: smooth;
+}
