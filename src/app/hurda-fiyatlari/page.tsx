@@ -25,6 +25,40 @@ const breadcrumbJsonLd = {
   ],
 };
 
+/**
+ * Schema.org JSON-LD: Article (weekly updated price guide)
+ *
+ * dateModified is CRITICAL — AI Overview prefers fresh content.
+ * Sprint 1B insight: 0/8 competitors have transparent dated price tables.
+ */
+const articleJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "@id": `${siteConfig.url}/hurda-fiyatlari#article`,
+  headline: pricingPageMeta.heroTitle,
+  description: pricingPageMeta.description,
+  url: `${siteConfig.url}/hurda-fiyatlari`,
+  datePublished: pricingMeta.lastUpdated,
+  dateModified: pricingMeta.lastUpdated,
+  author: {
+    "@id": `${siteConfig.url}/#organization`,
+  },
+  publisher: {
+    "@id": `${siteConfig.url}/#organization`,
+  },
+  mainEntityOfPage: {
+    "@type": "WebPage",
+    "@id": `${siteConfig.url}/hurda-fiyatlari`,
+  },
+  inLanguage: "tr-TR",
+  articleSection: "Fiyat Analizi",
+  about: {
+    "@type": "Thing",
+    name: "Hurda Metal Fiyatları",
+    description: pricingMeta.source,
+  },
+};
+
 export default function HurdaFiyatlariPage() {
   // Group by metal
   const grouped = pricing.reduce<Record<string, typeof pricing>>((acc, row) => {
@@ -35,6 +69,10 @@ export default function HurdaFiyatlariPage() {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}

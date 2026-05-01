@@ -40,25 +40,53 @@ export default async function ServiceDetailPage({ params }: PageParams) {
   );
   const otherServices = services.filter((s) => s.id !== slug).slice(0, 4);
 
-  // Service schema
+  // Service schema — extended with hasOfferCatalog (features as offers)
   const serviceJsonLd = {
     "@context": "https://schema.org",
     "@type": "Service",
+    "@id": `${siteConfig.url}/hizmetler/${slug}#service`,
     name: service.title,
     description: service.description,
+    serviceType: "Hurda Metal Alımı",
+    category: "Scrap Metal Recycling",
     provider: {
       "@id": `${siteConfig.url}/#organization`,
     },
     areaServed: [
-      "Gebze",
-      "Darıca",
-      "Çayırova",
-      "Dilovası",
-      "Pendik",
-      "Tuzla",
-      "Kocaeli",
+      { "@type": "City", name: "Gebze" },
+      { "@type": "City", name: "Darıca" },
+      { "@type": "City", name: "Çayırova" },
+      { "@type": "City", name: "Dilovası" },
+      { "@type": "City", name: "Pendik" },
+      { "@type": "City", name: "Tuzla" },
+      { "@type": "AdministrativeArea", name: "Kocaeli" },
     ],
-    serviceType: "Hurda Metal Alımı",
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: `${service.title} — Özellikler`,
+      itemListElement: service.features.map((feature) => ({
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: feature,
+        },
+      })),
+    },
+  };
+
+  // FAQPage schema for related FAQs
+  const faqPageJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "@id": `${siteConfig.url}/hizmetler/${slug}#faqpage`,
+    mainEntity: relatedFaqs.slice(0, 4).map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: faq.answer,
+      },
+    })),
   };
 
   const breadcrumbJsonLd = {
@@ -86,6 +114,10 @@ export default async function ServiceDetailPage({ params }: PageParams) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqPageJsonLd) }}
       />
       <script
         type="application/ld+json"

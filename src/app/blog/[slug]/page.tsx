@@ -139,11 +139,17 @@ export default async function BlogDetailPage({ params }: PageParams) {
   const articleJsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
+    "@id": `${siteConfig.url}/blog/${slug}#article`,
     headline: article.title,
     description: article.excerpt,
+    image: article.image
+      ? `${siteConfig.url}${article.image}`
+      : `${siteConfig.url}/opengraph-image`,
+    url: `${siteConfig.url}/blog/${slug}`,
     author: {
       "@type": "Organization",
       name: article.author,
+      url: siteConfig.url,
     },
     datePublished: article.publishedAt,
     dateModified: article.updatedAt,
@@ -154,6 +160,9 @@ export default async function BlogDetailPage({ params }: PageParams) {
       "@type": "WebPage",
       "@id": `${siteConfig.url}/blog/${slug}`,
     },
+    articleSection: categoryLabels[article.category] || article.category,
+    inLanguage: "tr-TR",
+    wordCount: article.content.split(/\s+/).filter(Boolean).length,
   };
 
   const breadcrumbJsonLd = {

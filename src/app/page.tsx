@@ -11,9 +11,52 @@ export const metadata = createMetadata({
   path: "/",
 });
 
+/**
+ * Schema.org JSON-LD: WebPage (home) + ItemList of services
+ *
+ * Note: Organization, WebSite, Person are root-level (in layout.tsx).
+ * Home page adds page-specific WebPage + service ItemList for richer SERP.
+ */
+const webPageJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": `${siteConfig.url}/#webpage`,
+  url: siteConfig.url,
+  name: pages.home.title,
+  description: pages.home.description,
+  isPartOf: { "@id": `${siteConfig.url}/#website` },
+  about: { "@id": `${siteConfig.url}/#organization` },
+  inLanguage: "tr-TR",
+};
+
+const servicesItemListJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "@id": `${siteConfig.url}/#service-list`,
+  name: servicesSection.title,
+  description: servicesSection.subtitle,
+  numberOfItems: services.length,
+  itemListElement: services.map((service, index) => ({
+    "@type": "ListItem",
+    position: index + 1,
+    url: `${siteConfig.url}/hizmetler/${service.id}`,
+    name: service.title,
+  })),
+};
+
 export default function HomePage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(servicesItemListJsonLd),
+        }}
+      />
       {/* Hero Section — Sprint 4'te zenginleştirilecek */}
       <section className="relative flex min-h-[80vh] items-center bg-primary-dark md:min-h-screen">
         <div className="absolute inset-0 z-0 bg-gradient-to-br from-primary-dark via-primary to-primary-light opacity-95" />

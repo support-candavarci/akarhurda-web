@@ -35,14 +35,18 @@ export default async function BolgeDetailPage({ params }: PageParams) {
   const bolge = bolgeler.find((b) => b.slug === slug);
   if (!bolge) notFound();
 
-  // LocalBusiness areaServed schema
+  // LocalBusiness branch schema (linked to parent organization)
   const localBusinessJsonLd = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
+    "@id": `${siteConfig.url}/hizmet-bolgeleri/${slug}#localbusiness`,
     name: `Akar Hurda — ${bolge.name}`,
     description: bolge.description,
     url: `${siteConfig.url}/hizmet-bolgeleri/${slug}`,
-    telephone: contact.phone,
+    telephone: contact.phoneHref.replace("tel:", ""),
+    parentOrganization: {
+      "@id": `${siteConfig.url}/#organization`,
+    },
     address: {
       "@type": "PostalAddress",
       addressLocality: bolge.district,
@@ -57,6 +61,26 @@ export default async function BolgeDetailPage({ params }: PageParams) {
     areaServed: {
       "@type": "City",
       name: bolge.name,
+    },
+    priceRange: "₺₺",
+  };
+
+  // Place schema for the service area
+  const placeJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Place",
+    "@id": `${siteConfig.url}/hizmet-bolgeleri/${slug}#place`,
+    name: bolge.name,
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: bolge.district,
+      addressRegion: bolge.city,
+      addressCountry: "TR",
+    },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: bolge.lat,
+      longitude: bolge.lng,
     },
   };
 
@@ -85,6 +109,10 @@ export default async function BolgeDetailPage({ params }: PageParams) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(placeJsonLd) }}
       />
       <script
         type="application/ld+json"

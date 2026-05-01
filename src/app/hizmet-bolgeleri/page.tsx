@@ -25,9 +25,40 @@ const breadcrumbJsonLd = {
   ],
 };
 
+/**
+ * Schema.org JSON-LD: CollectionPage + ItemList of 7 service areas
+ */
+const collectionPageJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "@id": `${siteConfig.url}/hizmet-bolgeleri#collectionpage`,
+  url: `${siteConfig.url}/hizmet-bolgeleri`,
+  name: bolgelerPageMeta.title,
+  description: bolgelerPageMeta.description,
+  isPartOf: { "@id": `${siteConfig.url}/#website` },
+  about: { "@id": `${siteConfig.url}/#organization` },
+  inLanguage: "tr-TR",
+  mainEntity: {
+    "@type": "ItemList",
+    numberOfItems: bolgeler.length,
+    itemListElement: bolgeler.map((bolge, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      url: `${siteConfig.url}/hizmet-bolgeleri/${bolge.slug}`,
+      name: bolge.primaryKeyword,
+    })),
+  },
+};
+
 export default function HizmetBolgesiPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(collectionPageJsonLd),
+        }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}

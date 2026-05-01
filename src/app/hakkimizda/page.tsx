@@ -18,12 +18,35 @@ export const metadata: Metadata = createMetadata({
 const personJsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
+  "@id": `${siteConfig.url}/#founder`,
   name: founder.name,
   jobTitle: founder.jobTitle,
   worksFor: {
     "@id": `${siteConfig.url}/#organization`,
   },
   description: founder.bio,
+};
+
+/**
+ * Schema.org JSON-LD: AboutPage
+ *
+ * mainEntity links to Organization (this is the "about" page for it)
+ */
+const aboutPageJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  "@id": `${siteConfig.url}/hakkimizda#aboutpage`,
+  url: `${siteConfig.url}/hakkimizda`,
+  name: meta.title,
+  description: meta.description,
+  isPartOf: { "@id": `${siteConfig.url}/#website` },
+  inLanguage: "tr-TR",
+  mainEntity: {
+    "@id": `${siteConfig.url}/#organization`,
+  },
+  about: {
+    "@id": `${siteConfig.url}/#organization`,
+  },
 };
 
 const breadcrumbJsonLd = {
@@ -47,6 +70,7 @@ const milestones = [
 export default function HakkimizdaPage() {
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutPageJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
       <main className="min-h-screen bg-background pt-24 pb-16 md:pt-32">

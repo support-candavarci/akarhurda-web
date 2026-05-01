@@ -16,10 +16,53 @@ export const metadata: Metadata = createMetadata({
 const contactPointJsonLd = {
   "@context": "https://schema.org",
   "@type": "ContactPoint",
-  telephone: contact.phone,
+  "@id": `${siteConfig.url}/iletisim#contactpoint`,
+  telephone: contact.phoneHref.replace("tel:", ""),
+  email: contact.email,
   contactType: "customer service",
   areaServed: "TR",
-  availableLanguage: ["tr"],
+  availableLanguage: ["Turkish"],
+};
+
+/**
+ * Schema.org JSON-LD: ContactPage
+ */
+const contactPageJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  "@id": `${siteConfig.url}/iletisim#contactpage`,
+  url: `${siteConfig.url}/iletisim`,
+  name: meta.title,
+  description: meta.description,
+  isPartOf: { "@id": `${siteConfig.url}/#website` },
+  about: { "@id": `${siteConfig.url}/#organization` },
+  inLanguage: "tr-TR",
+  mainEntity: {
+    "@id": `${siteConfig.url}/#organization`,
+  },
+};
+
+/**
+ * Schema.org JSON-LD: Place (Akar Hurda physical location)
+ */
+const placeJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Place",
+  "@id": `${siteConfig.url}/iletisim#place`,
+  name: `${siteConfig.name} — ${contact.address.district}`,
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: contact.address.street,
+    addressLocality: contact.address.district,
+    addressRegion: contact.address.city,
+    postalCode: contact.address.postalCode,
+    addressCountry: "TR",
+  },
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: contact.geo.lat,
+    longitude: contact.geo.lng,
+  },
 };
 
 const breadcrumbJsonLd = {
@@ -37,7 +80,9 @@ export default function IletisimPage() {
 
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(contactPageJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(contactPointJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(placeJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
       <main className="min-h-screen bg-background pt-24 pb-16 md:pt-32">
         <div className="mx-auto max-w-7xl px-4 md:px-8">

@@ -19,6 +19,54 @@ const breadcrumbJsonLd = {
   ],
 };
 
+/**
+ * Schema.org JSON-LD: Blog + ItemList of articles
+ */
+const blogJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  "@id": `${siteConfig.url}/blog#blog`,
+  url: `${siteConfig.url}/blog`,
+  name: articlesPageMeta.title,
+  description: articlesPageMeta.description,
+  inLanguage: "tr-TR",
+  publisher: { "@id": `${siteConfig.url}/#organization` },
+  blogPost: articles.map((article) => ({
+    "@type": "BlogPosting",
+    "@id": `${siteConfig.url}/blog/${article.slug}#article`,
+    headline: article.title,
+    description: article.excerpt,
+    url: `${siteConfig.url}/blog/${article.slug}`,
+    datePublished: article.publishedAt,
+    dateModified: article.updatedAt,
+    author: {
+      "@type": "Organization",
+      name: article.author,
+    },
+  })),
+};
+
+const articleListJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "@id": `${siteConfig.url}/blog#collectionpage`,
+  url: `${siteConfig.url}/blog`,
+  name: articlesPageMeta.title,
+  description: articlesPageMeta.description,
+  isPartOf: { "@id": `${siteConfig.url}/#website` },
+  inLanguage: "tr-TR",
+  mainEntity: {
+    "@type": "ItemList",
+    numberOfItems: articles.length,
+    itemListElement: articles.map((article, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      url: `${siteConfig.url}/blog/${article.slug}`,
+      name: article.title,
+    })),
+  },
+};
+
 const categoryLabels: Record<string, string> = {
   "metal-rehberi": "Metal Rehberi",
   "yasal-cevre": "Yasal & Çevre",
@@ -28,6 +76,8 @@ const categoryLabels: Record<string, string> = {
 export default function BlogPage() {
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(blogJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleListJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
       <main className="min-h-screen bg-background pt-24 pb-16 md:pt-32">
         <div className="mx-auto max-w-7xl px-4 md:px-8">

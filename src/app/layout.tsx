@@ -3,6 +3,8 @@ import { Geist } from "next/font/google";
 import "./globals.css";
 import { siteConfig } from "@/data/site";
 import { contact } from "@/data/contact";
+import { founder } from "@/data/founder";
+import { bolgeler } from "@/data/bolgeler";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import MobileBottomBar from "@/components/layout/MobileBottomBar";
@@ -39,14 +41,35 @@ export const metadata: Metadata = {
   },
 };
 
+/**
+ * Schema.org JSON-LD: Organization extended with LocalBusiness
+ *
+ * - Wikidata Q1373083 (ScrapDealer) sameAs via additionalType
+ * - Full NAP (Name, Address, Phone) data
+ * - openingHoursSpecification (Pazartesi-Cumartesi 08:00-19:00)
+ * - areaServed: 7 ilçe (bolgeler.ts)
+ * - contactPoint customer service
+ */
 const organizationJsonLd = {
   "@context": "https://schema.org",
-  "@type": "Organization",
+  "@type": ["Organization", "LocalBusiness"],
   "@id": `${siteConfig.url}/#organization`,
   name: siteConfig.legalName,
   alternateName: siteConfig.alternateName,
   url: siteConfig.url,
   description: siteConfig.description,
+  slogan: siteConfig.slogan,
+  foundingDate: String(siteConfig.foundedYear),
+  logo: {
+    "@type": "ImageObject",
+    "@id": `${siteConfig.url}/#logo`,
+    url: `${siteConfig.url}/icon`,
+    width: 512,
+    height: 512,
+  },
+  image: `${siteConfig.url}/opengraph-image`,
+  telephone: contact.phoneHref.replace("tel:", ""),
+  email: contact.email,
   address: {
     "@type": "PostalAddress",
     streetAddress: contact.address.street,
@@ -60,24 +83,81 @@ const organizationJsonLd = {
     latitude: contact.geo.lat,
     longitude: contact.geo.lng,
   },
-  telephone: contact.phoneHref,
-  email: contact.email,
-  foundingDate: String(siteConfig.foundedYear),
-  areaServed: {
-    "@type": "AdministrativeArea",
-    name: "Kocaeli",
-  },
+  areaServed: bolgeler.map((b) => ({
+    "@type": "City",
+    name: b.name,
+  })),
+  openingHoursSpecification: [
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+      ],
+      opens: "08:00",
+      closes: "19:00",
+    },
+  ],
+  priceRange: "₺₺",
+  contactPoint: [
+    {
+      "@type": "ContactPoint",
+      telephone: contact.phoneHref.replace("tel:", ""),
+      contactType: "customer service",
+      areaServed: "TR",
+      availableLanguage: ["Turkish"],
+    },
+  ],
+  // Wikidata: ScrapDealer entity (https://www.wikidata.org/wiki/Q1373083)
+  additionalType: "https://www.wikidata.org/wiki/Q1373083",
+  // sameAs reserved for social profiles when CEO provides them
+  ...(founder.sameAs.length > 0 && { sameAs: founder.sameAs }),
 };
 
+/**
+ * Schema.org JSON-LD: WebSite with SearchAction
+ */
 const websiteJsonLd = {
   "@context": "https://schema.org",
   "@type": "WebSite",
   "@id": `${siteConfig.url}/#website`,
   name: siteConfig.name,
   url: siteConfig.url,
+  description: siteConfig.description,
+  inLanguage: "tr-TR",
   publisher: {
     "@id": `${siteConfig.url}/#organization`,
   },
+  potentialAction: {
+    "@type": "SearchAction",
+    target: {
+      "@type": "EntryPoint",
+      urlTemplate: `${siteConfig.url}/blog?q={search_term_string}`,
+    },
+    "query-input": "required name=search_term_string",
+  },
+};
+
+/**
+ * Schema.org JSON-LD: Person (founder)
+ *
+ * NOT: founder.ts placeholder veri içerir. CEO gerçek bilgi sağlayınca güncellenir.
+ */
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "@id": `${siteConfig.url}/#founder`,
+  name: founder.name,
+  jobTitle: founder.jobTitle,
+  description: founder.bio,
+  worksFor: {
+    "@id": `${siteConfig.url}/#organization`,
+  },
+  ...(founder.sameAs.length > 0 && { sameAs: founder.sameAs }),
 };
 
 export default function RootLayout({
@@ -90,11 +170,17 @@ export default function RootLayout({
       <head>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationJsonLd),
+          }}
         />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
         />
       </head>
       <body className={`${geistSans.variable} antialiased`}>

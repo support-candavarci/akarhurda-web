@@ -20,9 +20,48 @@ const breadcrumbJsonLd = {
   ],
 };
 
+/**
+ * Schema.org JSON-LD: CollectionPage with ItemList of EducationalOccupationalCredential
+ *
+ * Each license/certificate is exposed as an EducationalOccupationalCredential
+ * with credentialCategory and recognizedBy (issuer organization).
+ */
+const credentialsCollectionJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "@id": `${siteConfig.url}/sertifikalar#collectionpage`,
+  url: `${siteConfig.url}/sertifikalar`,
+  name: licensesPageMeta.title,
+  description: licensesPageMeta.description,
+  isPartOf: { "@id": `${siteConfig.url}/#website` },
+  about: { "@id": `${siteConfig.url}/#organization` },
+  inLanguage: "tr-TR",
+  mainEntity: {
+    "@type": "ItemList",
+    numberOfItems: licenses.length,
+    itemListElement: licenses.map((lic, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      item: {
+        "@type": "EducationalOccupationalCredential",
+        name: lic.name,
+        description: lic.description,
+        credentialCategory: "license",
+        recognizedBy: {
+          "@type": "Organization",
+          name: lic.issuer,
+        },
+        dateCreated: String(lic.issuedYear),
+        ...(lic.expiryYear && { validUntil: String(lic.expiryYear) }),
+      },
+    })),
+  },
+};
+
 export default function SertifikalarPage() {
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(credentialsCollectionJsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
       <main className="min-h-screen bg-background pt-24 pb-16 md:pt-32">
         <div className="mx-auto max-w-7xl px-4 md:px-8">

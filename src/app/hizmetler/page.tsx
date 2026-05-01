@@ -33,9 +33,40 @@ const breadcrumbJsonLd = {
   ],
 };
 
+/**
+ * Schema.org JSON-LD: CollectionPage + ItemList of 10 services
+ */
+const collectionPageJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "@id": `${siteConfig.url}/hizmetler#collectionpage`,
+  url: `${siteConfig.url}/hizmetler`,
+  name: meta.title,
+  description: meta.description,
+  isPartOf: { "@id": `${siteConfig.url}/#website` },
+  about: { "@id": `${siteConfig.url}/#organization` },
+  inLanguage: "tr-TR",
+  mainEntity: {
+    "@type": "ItemList",
+    numberOfItems: services.length,
+    itemListElement: services.map((service, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      url: `${siteConfig.url}/hizmetler/${service.id}`,
+      name: service.title,
+    })),
+  },
+};
+
 export default function HurdaTurleriPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(collectionPageJsonLd),
+        }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
