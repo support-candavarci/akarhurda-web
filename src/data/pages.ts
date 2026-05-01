@@ -20,14 +20,14 @@ export const pages: Record<string, PageContent> = {
     heroTitle: "Hakkımızda",
     heroSubtitle: "2005'ten bu yana Gebze ve Kocaeli'nin hurda adresi.",
   },
-  "hurda-turleri": {
+  "hizmetler": {
     title: "Hurda Türleri | Akar Hurda — 10 Kategoride Metal Alımı",
     description:
       "Bakır, alüminyum, demir, kablo, elektronik, endüstriyel, akü, paslanmaz, pirinç, çinko hurda alımı. Kategorize fiyatlandırma.",
     heroTitle: "Hurda Türlerimiz",
     heroSubtitle: "10 kategoride profesyonel hurda metal alımı.",
   },
-  "hizmet-bolgesi": {
+  "hizmet-bolgeleri": {
     title: "Hizmet Bölgesi | Akar Hurda — Gebze, Kocaeli, Çevre İlçeler",
     description:
       "Gebze, Darıca, Çayırova, Dilovası, Tuzla ve çevre ilçelerde adresten hurda alım hizmeti.",

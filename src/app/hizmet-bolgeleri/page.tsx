@@ -8,7 +8,7 @@ import { createMetadata } from "@/lib/metadata";
 export const metadata: Metadata = createMetadata({
   title: bolgelerPageMeta.title,
   description: bolgelerPageMeta.description,
-  path: "/hizmet-bolgesi",
+  path: "/hizmet-bolgeleri",
 });
 
 const breadcrumbJsonLd = {
@@ -20,7 +20,7 @@ const breadcrumbJsonLd = {
       "@type": "ListItem",
       position: 2,
       name: "Hizmet Bölgesi",
-      item: `${siteConfig.url}/hizmet-bolgesi`,
+      item: `${siteConfig.url}/hizmet-bolgeleri`,
     },
   ],
 };
@@ -68,7 +68,7 @@ export default function HizmetBolgesiPage() {
             {bolgeler.map((bolge) => (
               <Link
                 key={bolge.slug}
-                href={`/hizmet-bolgesi/${bolge.slug}`}
+                href={`/hizmet-bolgeleri/${bolge.slug}`}
                 className="group rounded-xl border border-border bg-card p-6 transition hover:border-accent hover:shadow-lg"
               >
                 <h2 className="text-xl font-bold text-foreground group-hover:text-accent">

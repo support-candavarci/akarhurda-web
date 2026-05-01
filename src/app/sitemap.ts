@@ -11,9 +11,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const staticPages: MetadataRoute.Sitemap = [
     { url: base, lastModified: STATIC_LAST_MODIFIED, changeFrequency: "weekly", priority: 1.0 },
-    { url: `${base}/hurda-turleri`, lastModified: STATIC_LAST_MODIFIED, changeFrequency: "weekly", priority: 0.9 },
+    { url: `${base}/hizmetler`, lastModified: STATIC_LAST_MODIFIED, changeFrequency: "weekly", priority: 0.9 },
     { url: `${base}/hurda-fiyatlari`, lastModified: STATIC_LAST_MODIFIED, changeFrequency: "weekly", priority: 0.95 },
-    { url: `${base}/hizmet-bolgesi`, lastModified: STATIC_LAST_MODIFIED, changeFrequency: "monthly", priority: 0.9 },
+    { url: `${base}/hizmet-bolgeleri`, lastModified: STATIC_LAST_MODIFIED, changeFrequency: "monthly", priority: 0.9 },
     { url: `${base}/hakkimizda`, lastModified: STATIC_LAST_MODIFIED, changeFrequency: "monthly", priority: 0.7 },
     { url: `${base}/sertifikalar`, lastModified: STATIC_LAST_MODIFIED, changeFrequency: "monthly", priority: 0.7 },
     { url: `${base}/sss`, lastModified: STATIC_LAST_MODIFIED, changeFrequency: "monthly", priority: 0.7 },
@@ -27,14 +27,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ];
 
   const servicePages: MetadataRoute.Sitemap = services.map((s) => ({
-    url: `${base}/hurda-turleri/${s.id}`,
+    url: `${base}/hizmetler/${s.id}`,
     lastModified: STATIC_LAST_MODIFIED,
     changeFrequency: "monthly" as const,
     priority: 0.85,
   }));
 
   const bolgePages: MetadataRoute.Sitemap = bolgeler.map((b) => ({
-    url: `${base}/hizmet-bolgesi/${b.slug}`,
+    url: `${base}/hizmet-bolgeleri/${b.slug}`,
     lastModified: STATIC_LAST_MODIFIED,
     changeFrequency: "monthly" as const,
     priority: 0.85,

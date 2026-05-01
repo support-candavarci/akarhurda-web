@@ -8,7 +8,7 @@
  * Title formülü: `[İlçe] Hurdacı | Akar Hurda — 20 Yıl Deneyim`
  */
 export interface Bolge {
-  /** URL slug — `/hizmet-bolgesi/[slug]` */
+  /** URL slug — `/hizmet-bolgeleri/[slug]` */
   slug: string;
   /** İlçe adı */
   name: string;

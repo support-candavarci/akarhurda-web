@@ -26,7 +26,7 @@ export async function generateMetadata({
   return createMetadata({
     title: `${bolge.primaryKeyword} | Akar Hurda — 20 Yıl Deneyim, Adresten Alım`,
     description: `${bolge.name} bölgesinde lisanslı hurda metal alımı. 20 yıllık tecrübe, ücretsiz adresten alım, anında ödeme. Bakır, alüminyum, demir, kablo, elektronik hurda.`,
-    path: `/hizmet-bolgesi/${slug}`,
+    path: `/hizmet-bolgeleri/${slug}`,
   });
 }
 
@@ -41,7 +41,7 @@ export default async function BolgeDetailPage({ params }: PageParams) {
     "@type": "LocalBusiness",
     name: `Akar Hurda — ${bolge.name}`,
     description: bolge.description,
-    url: `${siteConfig.url}/hizmet-bolgesi/${slug}`,
+    url: `${siteConfig.url}/hizmet-bolgeleri/${slug}`,
     telephone: contact.phone,
     address: {
       "@type": "PostalAddress",
@@ -69,13 +69,13 @@ export default async function BolgeDetailPage({ params }: PageParams) {
         "@type": "ListItem",
         position: 2,
         name: "Hizmet Bölgesi",
-        item: `${siteConfig.url}/hizmet-bolgesi`,
+        item: `${siteConfig.url}/hizmet-bolgeleri`,
       },
       {
         "@type": "ListItem",
         position: 3,
         name: bolge.name,
-        item: `${siteConfig.url}/hizmet-bolgesi/${slug}`,
+        item: `${siteConfig.url}/hizmet-bolgeleri/${slug}`,
       },
     ],
   };
@@ -98,7 +98,7 @@ export default async function BolgeDetailPage({ params }: PageParams) {
               Ana Sayfa
             </Link>
             <span className="mx-2">/</span>
-            <Link href="/hizmet-bolgesi" className="hover:text-primary">
+            <Link href="/hizmet-bolgeleri" className="hover:text-primary">
               Hizmet Bölgesi
             </Link>
             <span className="mx-2">/</span>
@@ -164,7 +164,7 @@ export default async function BolgeDetailPage({ params }: PageParams) {
                   {services.map((s) => (
                     <li key={s.id}>
                       <Link
-                        href={`/hurda-turleri/${s.id}`}
+                        href={`/hizmetler/${s.id}`}
                         className="flex items-start gap-2 rounded-lg p-2 text-sm text-muted hover:bg-background hover:text-accent"
                       >
                         <span className="text-accent">→</span>
@@ -242,7 +242,7 @@ export default async function BolgeDetailPage({ params }: PageParams) {
                     .map((b) => (
                       <li key={b.slug}>
                         <Link
-                          href={`/hizmet-bolgesi/${b.slug}`}
+                          href={`/hizmet-bolgeleri/${b.slug}`}
                           className="text-muted hover:text-accent"
                         >
                           → {b.primaryKeyword}

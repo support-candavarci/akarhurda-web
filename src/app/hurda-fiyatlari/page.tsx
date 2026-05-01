@@ -94,7 +94,7 @@ export default function HurdaFiyatlariPage() {
                         </td>
                         <td className="py-3 text-right text-sm">
                           {row.serviceSlug ? (
-                            <Link href={`/hurda-turleri/${row.serviceSlug}`} className="text-accent hover:underline">
+                            <Link href={`/hizmetler/${row.serviceSlug}`} className="text-accent hover:underline">
                               Hizmet detayı →
                             </Link>
                           ) : null}

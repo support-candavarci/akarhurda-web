@@ -42,7 +42,7 @@ export const faqs: FaqItem[] = [
     category: "genel",
     question: "Hangi metalleri alıyorsunuz?",
     answer:
-      "10 ana kategoride hurda alıyoruz: bakır, alüminyum, demir, kablo, elektronik, endüstriyel hurda, akü, paslanmaz/krom, pirinç/bronz, çinko. Her kategori için detaylı sayfamızı `/hurda-turleri` altında inceleyebilirsiniz.",
+      "10 ana kategoride hurda alıyoruz: bakır, alüminyum, demir, kablo, elektronik, endüstriyel hurda, akü, paslanmaz/krom, pirinç/bronz, çinko. Her kategori için detaylı sayfamızı `/hizmetler` altında inceleyebilirsiniz.",
   },
   {
     id: "minimum-miktar-var-mi",

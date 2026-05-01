@@ -25,7 +25,7 @@ export async function generateMetadata({
   return createMetadata({
     title: `${service.title} | Akar Hurda — Gebze/Kocaeli`,
     description: `${service.description} 20 yıllık tecrübe, adresten alım, anında ödeme. Gebze ve çevre ilçelerde hizmet.`,
-    path: `/hurda-turleri/${slug}`,
+    path: `/hizmetler/${slug}`,
   });
 }
 
@@ -70,13 +70,13 @@ export default async function ServiceDetailPage({ params }: PageParams) {
         "@type": "ListItem",
         position: 2,
         name: "Hurda Türleri",
-        item: `${siteConfig.url}/hurda-turleri`,
+        item: `${siteConfig.url}/hizmetler`,
       },
       {
         "@type": "ListItem",
         position: 3,
         name: service.title,
-        item: `${siteConfig.url}/hurda-turleri/${slug}`,
+        item: `${siteConfig.url}/hizmetler/${slug}`,
       },
     ],
   };
@@ -99,7 +99,7 @@ export default async function ServiceDetailPage({ params }: PageParams) {
               Ana Sayfa
             </Link>
             <span className="mx-2">/</span>
-            <Link href="/hurda-turleri" className="hover:text-primary">
+            <Link href="/hizmetler" className="hover:text-primary">
               Hurda Türleri
             </Link>
             <span className="mx-2">/</span>
@@ -217,7 +217,7 @@ export default async function ServiceDetailPage({ params }: PageParams) {
                   {otherServices.map((s) => (
                     <li key={s.id}>
                       <Link
-                        href={`/hurda-turleri/${s.id}`}
+                        href={`/hizmetler/${s.id}`}
                         className="text-muted hover:text-accent"
                       >
                         → {s.title}

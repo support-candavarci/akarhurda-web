@@ -6,12 +6,12 @@ import { contact } from "@/data/contact";
 import { siteConfig } from "@/data/site";
 import { createMetadata } from "@/lib/metadata";
 
-const meta = pages["hurda-turleri"];
+const meta = pages["hizmetler"];
 
 export const metadata: Metadata = createMetadata({
   title: meta.title,
   description: meta.description,
-  path: "/hurda-turleri",
+  path: "/hizmetler",
 });
 
 const breadcrumbJsonLd = {
@@ -28,7 +28,7 @@ const breadcrumbJsonLd = {
       "@type": "ListItem",
       position: 2,
       name: "Hurda Türleri",
-      item: `${siteConfig.url}/hurda-turleri`,
+      item: `${siteConfig.url}/hizmetler`,
     },
   ],
 };
@@ -76,7 +76,7 @@ export default function HurdaTurleriPage() {
             {services.map((service) => (
               <Link
                 key={service.id}
-                href={`/hurda-turleri/${service.id}`}
+                href={`/hizmetler/${service.id}`}
                 className="group rounded-xl border border-border bg-card p-6 transition hover:border-accent hover:shadow-lg"
               >
                 <h2 className="text-xl font-bold text-foreground group-hover:text-accent">

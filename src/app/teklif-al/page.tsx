@@ -96,7 +96,7 @@ export default function TeklifAlPage() {
               {services.map((s) => (
                 <Link
                   key={s.id}
-                  href={`/hurda-turleri/${s.id}`}
+                  href={`/hizmetler/${s.id}`}
                   className="rounded-lg border border-border p-3 text-sm text-muted transition hover:border-accent hover:text-accent"
                 >
                   → {s.title}
