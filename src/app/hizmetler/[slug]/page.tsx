@@ -29,6 +29,119 @@ export async function generateMetadata({
   });
 }
 
+/**
+ * Native markdown-ish renderer for longDescription / informationGain content.
+ * Supports: paragraphs, ## headings, ### subheadings, bullet lists,
+ * numbered lists, **bold** emphasis, simple tables.
+ */
+function renderRichText(content: string) {
+  return content.split("\n\n").map((block, i) => {
+    const trimmed = block.trim();
+    if (!trimmed) return null;
+
+    if (trimmed.startsWith("## ")) {
+      return (
+        <h3 key={i} className="mt-6 mb-3 text-xl font-bold text-foreground">
+          {trimmed.replace(/^##\s/, "")}
+        </h3>
+      );
+    }
+    if (trimmed.startsWith("### ")) {
+      return (
+        <h4 key={i} className="mt-4 mb-2 text-lg font-bold text-foreground">
+          {trimmed.replace(/^###\s/, "")}
+        </h4>
+      );
+    }
+    if (trimmed.startsWith("- ") || trimmed.startsWith("* ")) {
+      const items = trimmed.split("\n").map((l) => l.replace(/^[-*]\s/, ""));
+      return (
+        <ul key={i} className="my-3 list-disc space-y-1 pl-6 text-muted">
+          {items.map((item, j) => (
+            <li key={j}>{renderInline(item)}</li>
+          ))}
+        </ul>
+      );
+    }
+    if (/^\d+\.\s/.test(trimmed)) {
+      const items = trimmed.split("\n").map((l) => l.replace(/^\d+\.\s/, ""));
+      return (
+        <ol key={i} className="my-3 list-decimal space-y-1 pl-6 text-muted">
+          {items.map((item, j) => (
+            <li key={j}>{renderInline(item)}</li>
+          ))}
+        </ol>
+      );
+    }
+    if (trimmed.startsWith("|")) {
+      const lines = trimmed.split("\n").filter((l) => l.startsWith("|"));
+      if (lines.length < 2) return null;
+      const headers = lines[0]
+        .split("|")
+        .map((c) => c.trim())
+        .filter(Boolean);
+      const rows = lines.slice(2).map((line) =>
+        line
+          .split("|")
+          .map((c) => c.trim())
+          .filter(Boolean),
+      );
+      return (
+        <div key={i} className="my-4 overflow-x-auto">
+          <table className="w-full border border-border text-sm">
+            <thead>
+              <tr className="bg-card">
+                {headers.map((h, j) => (
+                  <th
+                    key={j}
+                    className="border border-border p-2 text-left font-bold text-foreground"
+                  >
+                    {h}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((row, j) => (
+                <tr key={j}>
+                  {row.map((cell, k) => (
+                    <td
+                      key={k}
+                      className="border border-border p-2 text-muted"
+                    >
+                      {renderInline(cell)}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      );
+    }
+    return (
+      <p key={i} className="my-3 text-muted leading-relaxed">
+        {renderInline(trimmed)}
+      </p>
+    );
+  });
+}
+
+function renderInline(text: string) {
+  // Replace **bold** with <strong>
+  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  return parts.map((part, i) => {
+    if (part.startsWith("**") && part.endsWith("**")) {
+      return (
+        <strong key={i} className="font-bold text-foreground">
+          {part.slice(2, -2)}
+        </strong>
+      );
+    }
+    return <span key={i}>{part}</span>;
+  });
+}
+
 export default async function ServiceDetailPage({ params }: PageParams) {
   const { slug } = await params;
   const service = services.find((s) => s.id === slug);
@@ -74,6 +187,23 @@ export default async function ServiceDetailPage({ params }: PageParams) {
     },
   };
 
+  // HowTo schema for processSteps
+  const howToJsonLd = service.processSteps
+    ? {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "@id": `${siteConfig.url}/hizmetler/${slug}#howto`,
+        name: `${service.title} — Süreç Akışı`,
+        description: `${service.title} hizmetimiz nasıl işliyor — 4 adım`,
+        step: service.processSteps.map((s) => ({
+          "@type": "HowToStep",
+          position: s.step,
+          name: s.title,
+          text: s.description,
+        })),
+      }
+    : null;
+
   // FAQPage schema for related FAQs
   const faqPageJsonLd = {
     "@context": "https://schema.org",
@@ -115,6 +245,12 @@ export default async function ServiceDetailPage({ params }: PageParams) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
       />
+      {howToJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(howToJsonLd) }}
+        />
+      )}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqPageJsonLd) }}
@@ -148,7 +284,7 @@ export default async function ServiceDetailPage({ params }: PageParams) {
           </header>
 
           <div className="grid gap-8 lg:grid-cols-3">
-            <div className="lg:col-span-2">
+            <div className="lg:col-span-2 space-y-8">
               <section className="rounded-2xl border border-border bg-card p-6 md:p-8">
                 <h2 className="text-2xl font-bold text-foreground">
                   Hizmet Özellikleri
@@ -163,8 +299,83 @@ export default async function ServiceDetailPage({ params }: PageParams) {
                 </ul>
               </section>
 
+              {service.longDescription && (
+                <section className="rounded-2xl border border-border bg-card p-6 md:p-8">
+                  <h2 className="text-2xl font-bold text-foreground">
+                    {service.title} — Detaylı Rehber
+                  </h2>
+                  <div className="mt-4">
+                    {renderRichText(service.longDescription)}
+                  </div>
+                </section>
+              )}
+
+              {service.processSteps && service.processSteps.length > 0 && (
+                <section className="rounded-2xl border border-border bg-card p-6 md:p-8">
+                  <h2 className="text-2xl font-bold text-foreground">
+                    Süreç Nasıl İşler — 4 Adım
+                  </h2>
+                  <ol className="mt-6 space-y-4">
+                    {service.processSteps.map((step) => (
+                      <li key={step.step} className="flex gap-4">
+                        <div className="flex h-10 w-10 flex-none items-center justify-center rounded-full bg-accent font-extrabold text-primary">
+                          {step.step}
+                        </div>
+                        <div>
+                          <h3 className="font-bold text-foreground">
+                            {step.title}
+                          </h3>
+                          <p className="mt-1 text-sm text-muted leading-relaxed">
+                            {step.description}
+                          </p>
+                        </div>
+                      </li>
+                    ))}
+                  </ol>
+                </section>
+              )}
+
+              {service.priceFactors && service.priceFactors.length > 0 && (
+                <section className="rounded-2xl border border-border bg-card p-6 md:p-8">
+                  <h2 className="text-2xl font-bold text-foreground">
+                    Fiyatı Etkileyen Faktörler
+                  </h2>
+                  <p className="mt-2 text-sm text-muted">
+                    LME endeksi, kalite sınıfı ve diğer faktörlerin fiyatınıza
+                    etkisi.
+                  </p>
+                  <div className="mt-4 overflow-x-auto">
+                    <table className="w-full text-left text-sm">
+                      <thead>
+                        <tr className="border-b border-border">
+                          <th className="py-3 font-bold text-foreground">
+                            Faktör
+                          </th>
+                          <th className="py-3 font-bold text-foreground">
+                            Etkisi
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {service.priceFactors.map((row, i) => (
+                          <tr
+                            key={i}
+                            className="border-b border-border last:border-0"
+                          >
+                            <td className="py-3 font-bold text-foreground align-top">
+                              {row.factor}
+                            </td>
+                            <td className="py-3 text-muted">{row.impact}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </section>
+              )}
+
               {relatedPricing.length > 0 && (
-                <section className="mt-8 rounded-2xl border border-border bg-card p-6 md:p-8">
+                <section className="rounded-2xl border border-border bg-card p-6 md:p-8">
                   <h2 className="text-2xl font-bold text-foreground">
                     Güncel Fiyat Aralığı
                   </h2>
@@ -205,18 +416,24 @@ export default async function ServiceDetailPage({ params }: PageParams) {
               )}
 
               {/* Information Gain Block — rakipte yok bizde var */}
-              <section className="mt-8 rounded-2xl border-2 border-accent/30 bg-accent/5 p-6 md:p-8">
+              <section className="rounded-2xl border-2 border-accent/30 bg-accent/5 p-6 md:p-8">
                 <h2 className="text-2xl font-bold text-foreground">
-                  Bilmeniz Gerekenler
+                  Information Gain — Rakipte Yok, Bizde Var
                 </h2>
-                <p className="mt-3 text-muted leading-relaxed">
-                  {service.title.toLowerCase()} sürecinde hak ettiğiniz fiyatı almak
-                  için: (1) Mümkünse hurdanızı kategorilere ayrı tartılması için
-                  hazır tutun, (2) Kablo ise plastik kaplı veya soyulmuş olarak
-                  ayrımını bilin, (3) Nakliye sırasında metalleri çapraz kirletmeyin
-                  (örn. demir parçalarla bakırı bir arada tutmayın). 20 yıllık saha
-                  tecrübemizle bu detayların değer farkı yaratabildiğini biliyoruz.
-                </p>
+                {service.informationGain ? (
+                  <div className="mt-3">
+                    {renderRichText(service.informationGain)}
+                  </div>
+                ) : (
+                  <p className="mt-3 text-muted leading-relaxed">
+                    {service.title.toLowerCase()} sürecinde hak ettiğiniz fiyatı
+                    almak için: (1) Mümkünse hurdanızı kategorilere ayrı tartılması
+                    için hazır tutun, (2) Kablo ise plastik kaplı veya soyulmuş
+                    olarak ayrımını bilin, (3) Nakliye sırasında metalleri çapraz
+                    kirletmeyin. 20 yıllık saha tecrübemizle bu detayların değer
+                    farkı yaratabildiğini biliyoruz.
+                  </p>
+                )}
               </section>
             </div>
 
