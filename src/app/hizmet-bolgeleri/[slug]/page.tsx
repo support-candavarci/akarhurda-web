@@ -30,6 +30,71 @@ export async function generateMetadata({
   });
 }
 
+/**
+ * Native markdown-ish renderer for longDescription.
+ * Supports: paragraphs, ## headings, ### subheadings, bullet lists, **bold**.
+ */
+function renderRichText(content: string) {
+  return content.split("\n\n").map((block, i) => {
+    const trimmed = block.trim();
+    if (!trimmed) return null;
+
+    if (trimmed.startsWith("## ")) {
+      return (
+        <h3 key={i} className="mt-6 mb-3 text-xl font-bold text-foreground">
+          {trimmed.replace(/^##\s/, "")}
+        </h3>
+      );
+    }
+    if (trimmed.startsWith("### ")) {
+      return (
+        <h4 key={i} className="mt-4 mb-2 text-lg font-bold text-foreground">
+          {trimmed.replace(/^###\s/, "")}
+        </h4>
+      );
+    }
+    if (trimmed.startsWith("- ") || trimmed.startsWith("* ")) {
+      const items = trimmed.split("\n").map((l) => l.replace(/^[-*]\s/, ""));
+      return (
+        <ul key={i} className="my-3 list-disc space-y-1 pl-6 text-muted">
+          {items.map((item, j) => (
+            <li key={j}>{renderInline(item)}</li>
+          ))}
+        </ul>
+      );
+    }
+    if (/^\d+\.\s/.test(trimmed)) {
+      const items = trimmed.split("\n").map((l) => l.replace(/^\d+\.\s/, ""));
+      return (
+        <ol key={i} className="my-3 list-decimal space-y-1 pl-6 text-muted">
+          {items.map((item, j) => (
+            <li key={j}>{renderInline(item)}</li>
+          ))}
+        </ol>
+      );
+    }
+    return (
+      <p key={i} className="my-3 text-muted leading-relaxed">
+        {renderInline(trimmed)}
+      </p>
+    );
+  });
+}
+
+function renderInline(text: string) {
+  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  return parts.map((part, i) => {
+    if (part.startsWith("**") && part.endsWith("**")) {
+      return (
+        <strong key={i} className="font-bold text-foreground">
+          {part.slice(2, -2)}
+        </strong>
+      );
+    }
+    return <span key={i}>{part}</span>;
+  });
+}
+
 export default async function BolgeDetailPage({ params }: PageParams) {
   const { slug } = await params;
   const bolge = bolgeler.find((b) => b.slug === slug);
@@ -183,6 +248,22 @@ export default async function BolgeDetailPage({ params }: PageParams) {
                   </div>
                 </div>
               </section>
+
+              {bolge.longDescription && (
+                <section className="rounded-2xl border border-border bg-card p-6 md:p-8">
+                  <h2 className="text-2xl font-bold text-foreground">
+                    {bolge.name} Bölgesi Hakkında Detaylı Bilgi
+                  </h2>
+                  {bolge.customerProfile && (
+                    <p className="mt-3 text-sm text-accent font-semibold">
+                      Müşteri Profilimiz: {bolge.customerProfile}
+                    </p>
+                  )}
+                  <div className="mt-4">
+                    {renderRichText(bolge.longDescription)}
+                  </div>
+                </section>
+              )}
 
               <section className="rounded-2xl border border-border bg-card p-6 md:p-8">
                 <h2 className="text-2xl font-bold text-foreground">
