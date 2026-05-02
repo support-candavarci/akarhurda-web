@@ -12,8 +12,8 @@
   --color-secondary: #475569;
   --color-dark: #0a0a0a;
   --color-light: #f8fafc;
-  --color-whatsapp: #128c34;
-  --color-whatsapp-hover: #0d6627;
+  --color-whatsapp: #0d6627;
+  --color-whatsapp-hover: #084d1d;
 }
 
 @theme inline {
