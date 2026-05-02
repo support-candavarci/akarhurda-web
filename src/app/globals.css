@@ -5,14 +5,15 @@
   --color-primary: #1e293b;
   --color-primary-light: #475569;
   --color-primary-dark: #0f172a;
-  --color-accent: #ea580c;
-  --color-accent-hover: #c2410c;
+  /* WCAG AA contrast fix (Sprint 8): orange-700 (4.66 white ratio), green-700 (5.7 white ratio) */
+  --color-accent: #c2410c;
+  --color-accent-hover: #9a3412;
   --color-accent-light: #fb923c;
   --color-secondary: #475569;
   --color-dark: #0a0a0a;
   --color-light: #f8fafc;
-  --color-whatsapp: #25D366;
-  --color-whatsapp-hover: #1DA851;
+  --color-whatsapp: #128c34;
+  --color-whatsapp-hover: #0d6627;
 }
 
 @theme inline {

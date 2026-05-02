@@ -20,7 +20,7 @@ export default function Footer() {
                 {siteConfig.shortName}
               </span>
             </div>
-            <p className="mb-6 text-sm leading-relaxed text-gray-500">
+            <p className="mb-6 text-sm leading-relaxed text-gray-400">
               {footerAbout.description}
             </p>
             <div className="flex gap-3">
@@ -29,21 +29,21 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="WhatsApp"
-                className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/5 text-gray-500 transition-all hover:bg-accent/20 hover:text-accent"
+                className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/5 text-gray-400 transition-all hover:bg-accent/20 hover:text-accent"
               >
                 <WhatsAppSmallIcon />
               </a>
               <a
                 href={`mailto:${contact.email}`}
                 aria-label="E-posta"
-                className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/5 text-gray-500 transition-all hover:bg-accent/20 hover:text-accent"
+                className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/5 text-gray-400 transition-all hover:bg-accent/20 hover:text-accent"
               >
                 <EnvelopeIcon />
               </a>
               <a
                 href={contact.phoneHref}
                 aria-label="Telefon"
-                className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/5 text-gray-500 transition-all hover:bg-accent/20 hover:text-accent"
+                className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/5 text-gray-400 transition-all hover:bg-accent/20 hover:text-accent"
               >
                 <PhoneSmallIcon />
               </a>
@@ -53,15 +53,15 @@ export default function Footer() {
           {/* Link Groups */}
           {footerGroups.map((group) => (
             <div key={group.title}>
-              <h4 className="mb-5 text-sm font-bold uppercase tracking-widest text-white">
+              <h3 className="mb-5 text-sm font-bold uppercase tracking-widest text-white">
                 {group.title}
-              </h4>
+              </h3>
               <ul className="space-y-3">
                 {group.links.map((link) => (
                   <li key={link.href + link.label}>
                     <Link
                       href={link.href}
-                      className="group/link flex items-center gap-2 text-sm text-gray-500 transition-colors hover:text-accent"
+                      className="group/link flex items-center gap-2 text-sm text-gray-400 transition-colors hover:text-accent"
                     >
                       <span className="h-px w-0 bg-accent transition-all group-hover/link:w-3" />
                       {link.label}
@@ -74,15 +74,15 @@ export default function Footer() {
 
           {/* Contact */}
           <div>
-            <h4 className="mb-5 text-sm font-bold uppercase tracking-widest text-white">
+            <h3 className="mb-5 text-sm font-bold uppercase tracking-widest text-white">
               {contact.labels.contact}
-            </h4>
+            </h3>
             <ul className="space-y-4">
               <li className="flex gap-3">
                 <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-accent/10">
                   <LocationIcon />
                 </div>
-                <span className="text-sm leading-relaxed text-gray-500">
+                <span className="text-sm leading-relaxed text-gray-400">
                   {contact.address.full}
                 </span>
               </li>
@@ -92,7 +92,7 @@ export default function Footer() {
                 </div>
                 <a
                   href={contact.phoneHref}
-                  className="text-sm text-gray-500 transition-colors hover:text-white"
+                  className="text-sm text-gray-400 transition-colors hover:text-white"
                 >
                   {contact.phone}
                 </a>
@@ -103,7 +103,7 @@ export default function Footer() {
                 </div>
                 <a
                   href={`mailto:${contact.email}`}
-                  className="text-sm text-gray-500 transition-colors hover:text-white"
+                  className="text-sm text-gray-400 transition-colors hover:text-white"
                 >
                   {contact.email}
                 </a>
@@ -113,7 +113,7 @@ export default function Footer() {
         </div>
 
         {/* Legal Links */}
-        <div className="mt-14 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 border-t border-gray-800/80 pt-8 text-xs text-gray-600">
+        <div className="mt-14 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 border-t border-gray-800/80 pt-8 text-xs text-gray-400">
           {footerLegal.map((item) => (
             <Link
               key={item.href}
@@ -126,7 +126,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-4 flex flex-col items-center gap-3 pb-16 text-center text-xs text-gray-600 md:flex-row md:justify-between md:pb-0">
+        <div className="mt-4 flex flex-col items-center gap-3 pb-16 text-center text-xs text-gray-400 md:flex-row md:justify-between md:pb-0">
           <span>
             &copy; {new Date().getFullYear()} {siteConfig.name}.{" "}
             {siteConfig.ui.copyright}
