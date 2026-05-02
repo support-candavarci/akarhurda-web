@@ -9,6 +9,7 @@ import { articles } from "@/data/articles";
 import { pricing, pricingMeta } from "@/data/pricing";
 import { faqs, type FaqItem } from "@/data/faq";
 import { founder } from "@/data/founder";
+import Hero3D from "@/components/hero/Hero3D";
 
 export const metadata = createMetadata({
   title: pages.home.title,
@@ -155,16 +156,22 @@ export default function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(homeFaqJsonLd) }}
       />
 
-      {/* 1. Hero Section */}
-      <section className="relative flex min-h-[80vh] items-center bg-primary-dark md:min-h-screen">
+      {/* 1. Hero Section — Split Layout (text 60% sol + 3D 40% sağ) */}
+      <section className="relative min-h-[80vh] overflow-hidden bg-primary-dark md:min-h-screen">
+        {/* Background gradient mesh */}
         <div className="absolute inset-0 z-0 bg-gradient-to-br from-primary-dark via-primary to-primary-light opacity-95" />
-        <div className="relative z-10 mx-auto w-full max-w-7xl px-5 pt-28 pb-24 md:px-8 md:pt-20">
-          <div className="max-w-3xl">
+
+        {/* Subtle radial accent — bakır glow */}
+        <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_70%_40%,rgba(194,65,12,0.18),transparent_55%)]" />
+
+        <div className="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-12 px-5 pt-28 pb-24 md:grid-cols-12 md:gap-8 md:px-8 md:pt-20 lg:gap-16">
+          {/* Text Side — 60% on desktop */}
+          <div className="md:col-span-7">
             <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-accent backdrop-blur-md md:mb-6 md:text-xs">
               <span className="h-2 w-2 animate-pulse rounded-full bg-accent" />
               {siteConfig.slogan}
             </div>
-            <h1 className="mb-5 text-4xl font-bold leading-tight text-white md:mb-6 md:text-7xl">
+            <h1 className="mb-5 text-4xl font-bold leading-tight text-white md:mb-6 md:text-6xl lg:text-7xl">
               {pages.home.heroTitle}
               <br />
               <span className="text-accent">Akar Hurda</span>
@@ -187,6 +194,13 @@ export default function HomePage() {
               >
                 WhatsApp ile Yaz
               </a>
+            </div>
+          </div>
+
+          {/* 3D Side — 40% on desktop, hidden on mobile (Hero3D internally checks viewport) */}
+          <div className="hidden md:col-span-5 md:block">
+            <div className="relative aspect-square w-full max-w-md mx-auto">
+              <Hero3D />
             </div>
           </div>
         </div>
