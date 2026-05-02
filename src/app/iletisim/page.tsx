@@ -95,7 +95,48 @@ export default function IletisimPage() {
           <header className="mb-12 max-w-3xl">
             <h1 className="text-4xl font-extrabold tracking-tight text-foreground md:text-5xl">{meta.heroTitle}</h1>
             <p className="mt-4 text-lg text-muted md:text-xl">{meta.heroSubtitle}</p>
+            <p className="mt-6 text-base text-muted leading-relaxed md:text-lg">
+              Akar Hurda olarak Gebze Balçık Mahallesi&apos;nde 20 yıllık tesisimizden Kocaeli ve
+              İstanbul Anadolu yakasına hurda metal alımı hizmeti veriyoruz. Hurdanız için en hızlı
+              yol telefon — Pazartesi-Cumartesi 08:00-19:00 arasında {contact.phone} numarasını
+              arayın, miktar ve adres bilgisi ile aynı gün ya da ertesi gün adresten alım için
+              randevu netleşir. WhatsApp üzerinden fotoğraf ile teklif alımı için ise hurdanızın
+              fotoğraflarını gönderin — saniyeler içinde fiyat aralığı bildiriyoruz.
+            </p>
           </header>
+
+          <section className="mb-12 grid gap-6 rounded-2xl bg-primary p-8 text-white md:grid-cols-3 md:p-10">
+            <div>
+              <div className="mb-3 text-xs font-bold uppercase tracking-widest text-accent">
+                Hızlı Cevap
+              </div>
+              <h2 className="text-xl font-bold">Telefon ile</h2>
+              <p className="mt-2 text-sm text-white/80 md:text-base">
+                Aynı gün randevu için en hızlı yol. 08:00-19:00 arası canlı yanıt, dışındaki saatler
+                için sesli mesaj — geri dönüş 1 saat içinde.
+              </p>
+            </div>
+            <div>
+              <div className="mb-3 text-xs font-bold uppercase tracking-widest text-accent">
+                Görsel Teklif
+              </div>
+              <h2 className="text-xl font-bold">WhatsApp ile</h2>
+              <p className="mt-2 text-sm text-white/80 md:text-base">
+                Hurdanızın fotoğraflarını gönderin, sınıf tahmini + fiyat aralığı bildirilir.
+                B2B müşterilerimiz için WhatsApp Business hattı aktif.
+              </p>
+            </div>
+            <div>
+              <div className="mb-3 text-xs font-bold uppercase tracking-widest text-accent">
+                Detaylı Talep
+              </div>
+              <h2 className="text-xl font-bold">Form ile</h2>
+              <p className="mt-2 text-sm text-white/80 md:text-base">
+                Sanayi tesisleri ve şantiyeler için detaylı teklif formu — miktar, kategori, lojistik
+                bilgileri ile resmi fiyat teklifi 24 saat içinde.
+              </p>
+            </div>
+          </section>
 
           <div className="grid gap-8 lg:grid-cols-3">
             <div className="space-y-4 lg:col-span-1">
@@ -149,13 +190,35 @@ export default function IletisimPage() {
             </div>
           </div>
 
-          <section className="mt-16 rounded-2xl border-2 border-accent/30 bg-accent/5 p-8 md:p-12">
-            <h2 className="text-2xl font-extrabold text-foreground md:text-3xl">Detaylı Teklif İçin</h2>
-            <p className="mt-3 text-muted md:text-lg">
-              Hurdanızı detaylı tanımlayıp fotoğraflarla birlikte teklif almak için teklif formumuzu kullanın.
+          <section className="mt-16 rounded-2xl border border-border bg-card p-8 md:p-12">
+            <h2 className="text-2xl font-extrabold text-foreground md:text-3xl">Hizmet Bölgemiz</h2>
+            <p className="mt-3 text-muted leading-relaxed md:text-lg">
+              Gebze merkezimizden Kocaeli ve İstanbul Anadolu yakasına 7 ilçeye adresten alım
+              hizmeti veriyoruz. Mesafeye göre aynı gün veya ertesi gün için randevu netleşir.
+              Toplu alımlarda (sanayi tesisi, şantiye) lojistik ekibimiz randevu disiplinine uygun
+              hareket eder.
             </p>
-            <Link href="/teklif-al" className="mt-6 inline-flex items-center rounded-lg bg-accent px-6 py-3 font-bold text-primary transition hover:bg-accent-light">
-              Teklif Al →
+            <div className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-4">
+              <Link href="/hizmet-bolgeleri/gebze" className="rounded-lg border border-border bg-background px-4 py-3 text-center text-sm font-bold text-foreground transition hover:border-accent hover:text-accent">Gebze</Link>
+              <Link href="/hizmet-bolgeleri/darica" className="rounded-lg border border-border bg-background px-4 py-3 text-center text-sm font-bold text-foreground transition hover:border-accent hover:text-accent">Darıca</Link>
+              <Link href="/hizmet-bolgeleri/cayirova" className="rounded-lg border border-border bg-background px-4 py-3 text-center text-sm font-bold text-foreground transition hover:border-accent hover:text-accent">Çayırova</Link>
+              <Link href="/hizmet-bolgeleri/dilovasi" className="rounded-lg border border-border bg-background px-4 py-3 text-center text-sm font-bold text-foreground transition hover:border-accent hover:text-accent">Dilovası</Link>
+              <Link href="/hizmet-bolgeleri/pendik" className="rounded-lg border border-border bg-background px-4 py-3 text-center text-sm font-bold text-foreground transition hover:border-accent hover:text-accent">Pendik</Link>
+              <Link href="/hizmet-bolgeleri/tuzla" className="rounded-lg border border-border bg-background px-4 py-3 text-center text-sm font-bold text-foreground transition hover:border-accent hover:text-accent">Tuzla</Link>
+              <Link href="/hizmet-bolgeleri/kocaeli" className="rounded-lg border border-border bg-background px-4 py-3 text-center text-sm font-bold text-foreground transition hover:border-accent hover:text-accent">Kocaeli</Link>
+              <Link href="/hizmet-bolgeleri" className="rounded-lg bg-accent px-4 py-3 text-center text-sm font-bold text-white transition hover:bg-accent-hover">Tümü →</Link>
+            </div>
+          </section>
+
+          <section className="mt-12 rounded-2xl border-2 border-accent/30 bg-accent/5 p-8 md:p-12">
+            <h2 className="text-2xl font-extrabold text-foreground md:text-3xl">Detaylı Teklif İçin</h2>
+            <p className="mt-3 text-muted md:text-lg leading-relaxed">
+              Hurdanızı detaylı tanımlayıp fotoğraflarla birlikte teklif almak için teklif formumuzu
+              kullanın. B2B müşteriler (sanayi, inşaat, atölye) için UATF dokümantasyonu ve KDV&apos;li
+              resmi fatura standart sunulur. Düzenli alım için sözleşme bazlı çalışmaya açığız.
+            </p>
+            <Link href="/teklif-al" className="mt-6 inline-flex items-center rounded-lg bg-accent px-6 py-3 font-bold text-white transition hover:bg-accent-hover">
+              Teklif Formu →
             </Link>
           </section>
         </div>

@@ -22,10 +22,11 @@ export async function generateMetadata({
   const bolge = bolgeler.find((b) => b.slug === slug);
   if (!bolge) return {};
 
-  // KRİTİK: Sprint 1A keşfi — kelime sırası "[İlçe] Hurdacı"
+  // KRİTİK: Sprint 1A keşfi — kelime sırası "[İlçe] Hurdacı" (5-30x volume fark)
+  // Title ≤60 char hedef (Cyrus Shepard CTR best practice)
   return createMetadata({
-    title: `${bolge.primaryKeyword} | Akar Hurda — 20 Yıl Deneyim, Adresten Alım`,
-    description: `${bolge.name} bölgesinde lisanslı hurda metal alımı. 20 yıllık tecrübe, ücretsiz adresten alım, anında ödeme. Bakır, alüminyum, demir, kablo, elektronik hurda.`,
+    title: `${bolge.primaryKeyword} – Akar Hurda | 20 Yıl Tecrübe`,
+    description: `${bolge.name} hurda metal alımı. Lisanslı, adresten ücretsiz alım, LME endeksli şeffaf fiyat, anında ödeme. 20 yıllık güven.`,
     path: `/hizmet-bolgeleri/${slug}`,
   });
 }

@@ -24,7 +24,7 @@ export async function generateMetadata({
   if (!service) return {};
   return createMetadata({
     title: `${service.title} | Akar Hurda — Gebze/Kocaeli`,
-    description: `${service.description} 20 yıllık tecrübe, adresten alım, anında ödeme. Gebze ve çevre ilçelerde hizmet.`,
+    description: `${service.shortDescription}. Lisanslı alım, LME endeksli fiyat, anında ödeme. 20 yıl tecrübe — Gebze ve Kocaeli.`,
     path: `/hizmetler/${slug}`,
   });
 }

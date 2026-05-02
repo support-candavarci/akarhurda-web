@@ -9,7 +9,7 @@ export const pages: Record<string, PageContent> = {
   home: {
     title: "Akar Hurda | Gebze Kocaeli Hurda Metal Alımı",
     description:
-      "Akar Hurda — Gebze ve Kocaeli'nin güvenilir hurda metal alım adresi. Bakır, alüminyum, demir, kablo, elektronik, akü hurdası alımı. 20 yıl tecrübe, adresten alım, anında ödeme.",
+      "20 yıllık tecrübe ile Gebze ve Kocaeli'nde hurda metal alımı. Bakır, alüminyum, demir, kablo. Adresten alım, anında ödeme, LME endeksli şeffaf fiyat.",
     heroTitle: "Gebze ve Kocaeli'nin Güvenilir Hurda Adresi",
     heroSubtitle: "20 yıllık tecrübe, adresten alım, anında ödeme. Bakırdan çinkoya 10 kategoride hurda alımı.",
   },

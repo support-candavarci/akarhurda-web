@@ -168,6 +168,21 @@ export default function RootLayout({
   return (
     <html lang={siteConfig.language}>
       <head>
+        {/* Performance hints: preconnect/dns-prefetch (LCP optimization) */}
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="preconnect" href="https://www.google-analytics.com" />
+        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+        <link rel="dns-prefetch" href="https://maps.googleapis.com" />
+        <link rel="dns-prefetch" href="https://maps.gstatic.com" />
+
+        {/* Theme color (browser UI tint) */}
+        <meta name="theme-color" content="#08090d" media="(prefers-color-scheme: dark)" />
+        <meta name="theme-color" content="#1e293b" />
+
+        {/* Format detection — telefon numaraları için */}
+        <meta name="format-detection" content="telephone=yes" />
+
+        {/* Schema.org JSON-LD */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
