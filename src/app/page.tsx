@@ -156,52 +156,138 @@ export default function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(homeFaqJsonLd) }}
       />
 
-      {/* 1. Hero Section — Split Layout (text 60% sol + 3D 40% sağ) */}
-      <section className="relative min-h-[80vh] overflow-hidden bg-primary-dark md:min-h-screen">
-        {/* Background gradient mesh */}
-        <div className="absolute inset-0 z-0 bg-gradient-to-br from-primary-dark via-primary to-primary-light opacity-95" />
+      {/* 1. Hero Section — Premium Full-Bleed 3D Background (Linear/Anthropic style) */}
+      <section className="relative isolate min-h-[100vh] overflow-hidden bg-[#08090d]">
+        {/* Layer 1: Conic gradient mesh (premium ambient) */}
+        <div
+          className="absolute inset-0 z-0 opacity-70"
+          style={{
+            background: `
+              radial-gradient(ellipse 80% 60% at 75% 30%, rgba(194,65,12,0.25), transparent 65%),
+              radial-gradient(ellipse 60% 50% at 20% 80%, rgba(59,130,246,0.10), transparent 60%),
+              conic-gradient(from 220deg at 50% 50%, #0a0a0d 0deg, #1e293b 90deg, #0f172a 180deg, #0a0a0d 270deg, #0a0a0d 360deg)
+            `,
+          }}
+          aria-hidden="true"
+        />
 
-        {/* Subtle radial accent — bakır glow */}
-        <div className="absolute inset-0 z-0 bg-[radial-gradient(circle_at_70%_40%,rgba(194,65,12,0.18),transparent_55%)]" />
+        {/* Layer 2: Subtle grid pattern (Linear.app inspired) */}
+        <div
+          className="absolute inset-0 z-0 opacity-[0.07]"
+          style={{
+            backgroundImage: `
+              linear-gradient(to right, rgba(255,255,255,0.5) 1px, transparent 1px),
+              linear-gradient(to bottom, rgba(255,255,255,0.5) 1px, transparent 1px)
+            `,
+            backgroundSize: "64px 64px",
+            maskImage: "radial-gradient(ellipse 80% 60% at 50% 50%, black 30%, transparent 80%)",
+            WebkitMaskImage: "radial-gradient(ellipse 80% 60% at 50% 50%, black 30%, transparent 80%)",
+          }}
+          aria-hidden="true"
+        />
 
-        <div className="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-12 px-5 pt-28 pb-24 md:grid-cols-12 md:gap-8 md:px-8 md:pt-20 lg:gap-16">
-          {/* Text Side — 60% on desktop */}
-          <div className="md:col-span-7">
-            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-accent backdrop-blur-md md:mb-6 md:text-xs">
-              <span className="h-2 w-2 animate-pulse rounded-full bg-accent" />
-              {siteConfig.slogan}
+        {/* Layer 3: 3D Canvas — full bleed background (md+ only) */}
+        <div
+          className="absolute inset-0 z-0 hidden md:block"
+          style={{ maskImage: "linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)", WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)" }}
+          aria-hidden="true"
+        >
+          <Hero3D />
+        </div>
+
+        {/* Layer 4: Dark vignette + content readability overlay */}
+        <div
+          className="absolute inset-0 z-0 bg-gradient-to-r from-[#08090d] via-[#08090d]/60 to-transparent"
+          aria-hidden="true"
+        />
+        <div
+          className="absolute inset-0 z-0 bg-gradient-to-t from-[#08090d] via-transparent to-transparent"
+          aria-hidden="true"
+        />
+
+        {/* Layer 5: Content */}
+        <div className="relative z-10 mx-auto flex min-h-[100vh] w-full max-w-7xl flex-col justify-center px-5 pt-28 pb-32 md:px-8 md:pt-32 md:pb-20">
+          <div className="max-w-4xl">
+            {/* Eyebrow badge */}
+            <div className="mb-7 inline-flex items-center gap-2.5 rounded-full border border-orange-500/20 bg-orange-500/10 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.2em] text-orange-300 backdrop-blur-xl md:text-xs">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-orange-400 opacity-75"></span>
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-orange-500"></span>
+              </span>
+              <span>Gebze · Kocaeli · 20 Yıllık Güven</span>
             </div>
-            <h1 className="mb-5 text-4xl font-bold leading-tight text-white md:mb-6 md:text-6xl lg:text-7xl">
-              {pages.home.heroTitle}
-              <br />
-              <span className="text-accent">Akar Hurda</span>
+
+            {/* Massive H1 with gradient highlight */}
+            <h1 className="mb-8 text-[42px] font-black leading-[1.02] tracking-tight text-white md:text-7xl lg:text-[88px]">
+              <span className="block">Hurdanın</span>
+              <span className="block">Gerçek Değeri</span>
+              <span className="mt-2 block bg-gradient-to-r from-amber-400 via-orange-500 to-orange-700 bg-clip-text text-transparent">
+                Akar Hurda&apos;da.
+              </span>
             </h1>
-            <p className="mb-7 max-w-2xl text-base font-light leading-relaxed text-gray-300 md:mb-8 md:text-xl">
-              {pages.home.heroSubtitle}
+
+            {/* Subtitle with enhanced typography */}
+            <p className="mb-10 max-w-2xl text-lg font-light leading-relaxed text-gray-300 md:text-2xl md:leading-snug">
+              <span className="text-white font-medium">LME endeksli şeffaf fiyat.</span>{" "}
+              Adresten profesyonel alım. Tartım sonrası anında ödeme. 10 metal kategorisinde
+              Gebze ve Kocaeli&apos;nin 20 yıllık güvenilir adresi.
             </p>
+
+            {/* Premium CTA group */}
             <div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
+              {/* Primary — solid orange with glow */}
               <Link
                 href={contact.phoneHref}
-                className="inline-flex items-center justify-center gap-2 rounded-lg bg-accent px-6 py-3.5 text-sm font-bold text-white shadow-lg transition-all hover:scale-[1.02] hover:bg-accent-hover sm:px-8 sm:py-4 sm:text-base"
+                className="group relative inline-flex items-center justify-center gap-3 overflow-hidden rounded-xl bg-gradient-to-br from-orange-500 to-orange-700 px-7 py-4 text-base font-bold text-white shadow-[0_0_40px_rgba(234,88,12,0.3)] ring-1 ring-orange-400/30 transition-all hover:shadow-[0_0_60px_rgba(234,88,12,0.5)] hover:scale-[1.02] sm:px-9 sm:py-5"
               >
-                {contact.labels.callNow}: {contact.phone}
+                <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                </svg>
+                <span className="relative">Hemen Ara: {contact.phone}</span>
               </Link>
+
+              {/* Secondary — glass morphism with WhatsApp green */}
               <a
                 href={contact.whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 rounded-lg border-2 border-white/20 bg-white/5 px-6 py-3.5 text-sm font-bold text-white backdrop-blur-md transition-all hover:bg-white/10 sm:px-8 sm:py-4 sm:text-base"
+                className="group inline-flex items-center justify-center gap-3 rounded-xl border border-white/15 bg-white/5 px-7 py-4 text-base font-bold text-white backdrop-blur-xl transition-all hover:border-white/30 hover:bg-white/10 sm:px-9 sm:py-5"
               >
-                WhatsApp ile Yaz
+                <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.008-.57-.008-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487 2.981 1.286 2.981.858 3.519.806.538-.052 1.758-.718 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12.05 21.785h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884z" />
+                </svg>
+                <span>WhatsApp ile Yaz</span>
               </a>
             </div>
-          </div>
 
-          {/* 3D Side — 40% on desktop, hidden on mobile (Hero3D internally checks viewport) */}
-          <div className="hidden md:col-span-5 md:block">
-            <div className="relative aspect-square w-full max-w-md mx-auto">
-              <Hero3D />
+            {/* Inline trust micro-strip */}
+            <div className="mt-12 flex flex-wrap items-center gap-x-8 gap-y-3 text-xs font-semibold uppercase tracking-widest text-gray-400">
+              <div className="flex items-center gap-2">
+                <span className="h-1 w-1 rounded-full bg-orange-500" />
+                <span>2005&apos;ten Beri</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="h-1 w-1 rounded-full bg-orange-500" />
+                <span>Lisanslı &amp; Sigortalı</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="h-1 w-1 rounded-full bg-orange-500" />
+                <span>UATF Belgeli</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="h-1 w-1 rounded-full bg-orange-500" />
+                <span>KOSANO Üyesi</span>
+              </div>
             </div>
+          </div>
+        </div>
+
+        {/* Layer 6: Scroll indicator */}
+        <div className="absolute bottom-8 left-1/2 z-10 hidden -translate-x-1/2 md:block">
+          <div className="flex flex-col items-center gap-2 text-xs font-semibold uppercase tracking-widest text-gray-500">
+            <span>Aşağı Kaydır</span>
+            <div className="h-10 w-[1px] bg-gradient-to-b from-orange-500 to-transparent" />
           </div>
         </div>
       </section>

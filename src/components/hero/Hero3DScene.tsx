@@ -1,32 +1,28 @@
 "use client";
 
 /**
- * 3D Floating Metal Ingots — Hero showcase (Production-safe build)
+ * 3D Floating Metal Ingots — Premium Hero Background
  *
- * TRAP-12 uyumu: BoxGeometry kullanılıyor (geometrik/matematiksel şekil — ingot
- * formu organik değil). rules/3d-rendering-discipline.md §1 izinli.
+ * Premium upgrade (2026-05-02 v3):
+ * - 5 ingot (3 bakır + 1 altın + 1 dramatic large)
+ * - Mouse parallax (subtle camera movement)
+ * - Auto-rotation slow (organic feel)
+ * - Bigger composition (camera closer + larger ingots)
+ * - Lokal lighting (HDR external CDN dependency YOK)
+ * - Emissive glow + bigger pointLight
  *
- * Production-safe optimizations (2026-05-02 fix):
- * - Environment preset KALDIRILDI (HDR external CDN fail riski)
- * - Lokal 3-point lighting + emissive material → HDR'siz parıltı
- * - Reduced motion check window.matchMedia (framer-motion bağımlılığı kaldırıldı)
- * - Antialias=true ama dpr=1.5 cap (mobile GPU korunma)
- *
- * Performance:
- * - 4 mesh (3 bakır + 1 altın)
- * - MeshStandardMaterial PBR (metalness 0.9, emissive ile parıltı)
- * - drei Float — subtle bobbing animation
- * - 60fps GPU acceleration
+ * TRAP-12: BoxGeometry geometric primitive — organic shape DEĞİL ✓
  */
 
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useFrame } from "@react-three/fiber";
 import { Float, ContactShadows } from "@react-three/drei";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { ComponentProps } from "react";
+import * as THREE from "three";
 
-// Bakır renk: #B87333 (gerçek bakır), accent variant: #c2410c (brand orange-700)
-const COPPER_COLOR = "#B87333";
+const COPPER_PRIMARY = "#B87333";
 const COPPER_ACCENT = "#c2410c";
+const COPPER_DARK = "#7c2d12";
 const GOLD_COLOR = "#DAA520";
 
 interface IngotProps {
@@ -35,8 +31,8 @@ interface IngotProps {
   color: string;
   emissive?: string;
   scale?: number;
-  /** Float bobbing intensity (0 = static for reduced motion) */
   floatIntensity?: number;
+  rotationSpeed?: number;
 }
 
 function MetalIngot({
@@ -46,95 +42,151 @@ function MetalIngot({
   emissive,
   scale = 1,
   floatIntensity = 0.6,
+  rotationSpeed = 0.001,
 }: IngotProps) {
+  const meshRef = useRef<THREE.Mesh>(null);
+
+  useFrame(() => {
+    if (meshRef.current && rotationSpeed > 0) {
+      meshRef.current.rotation.y += rotationSpeed;
+    }
+  });
+
   return (
     <Float
-      speed={floatIntensity > 0 ? 1.5 : 0}
-      rotationIntensity={floatIntensity > 0 ? 0.4 : 0}
+      speed={floatIntensity > 0 ? 1.2 : 0}
+      rotationIntensity={floatIntensity > 0 ? 0.3 : 0}
       floatIntensity={floatIntensity}
     >
       <mesh
+        ref={meshRef}
         position={position}
         rotation={rotation}
         scale={scale}
         castShadow
         receiveShadow
       >
-        {/* Ingot proportions: 1.4 × 0.4 × 0.6 — gerçekçi külçe oranları */}
-        <boxGeometry args={[1.4, 0.4, 0.6]} />
+        <boxGeometry args={[1.6, 0.45, 0.7]} />
         <meshStandardMaterial
           color={color}
-          metalness={0.9}
-          roughness={0.25}
+          metalness={0.92}
+          roughness={0.22}
           emissive={emissive ?? color}
-          emissiveIntensity={0.08}
+          emissiveIntensity={0.12}
         />
       </mesh>
     </Float>
   );
 }
 
+/**
+ * Mouse parallax camera controller
+ * Subtle camera movement based on mouse position (-0.5 to +0.5 range)
+ */
+function ParallaxCamera({ enabled }: { enabled: boolean }) {
+  const targetX = useRef(0);
+  const targetY = useRef(0);
+
+  useEffect(() => {
+    if (!enabled) return;
+
+    const handleMouse = (e: MouseEvent) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 0.6;
+      const y = (e.clientY / window.innerHeight - 0.5) * 0.4;
+      targetX.current = x;
+      targetY.current = -y;
+    };
+
+    window.addEventListener("mousemove", handleMouse);
+    return () => window.removeEventListener("mousemove", handleMouse);
+  }, [enabled]);
+
+  useFrame(({ camera }) => {
+    if (!enabled) return;
+    camera.position.x += (targetX.current - camera.position.x) * 0.04;
+    camera.position.y += (0.3 + targetY.current - camera.position.y) * 0.04;
+    camera.lookAt(0, 0, 0);
+  });
+
+  return null;
+}
+
 type CanvasProps = ComponentProps<typeof Canvas>;
 
 export default function Hero3DScene() {
   const [floatIntensity, setFloatIntensity] = useState(0.6);
+  const [parallaxEnabled, setParallaxEnabled] = useState(true);
 
   useEffect(() => {
-    // Reduced motion check (framer-motion dependency kaldırıldı, native API)
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     setFloatIntensity(mq.matches ? 0 : 0.6);
+    setParallaxEnabled(!mq.matches);
 
     const handler = (e: MediaQueryListEvent) => {
       setFloatIntensity(e.matches ? 0 : 0.6);
+      setParallaxEnabled(!e.matches);
     };
     mq.addEventListener("change", handler);
     return () => mq.removeEventListener("change", handler);
   }, []);
 
-  // Variant B: Diagonal scatter — endüstriyel dynamic composition
-  // 3 bakır külçe Z-axis depth + 1 altın accent
+  // 5 ingot premium composition
   const ingots: IngotProps[] = [
-    // Foreground bakır — most visible
+    // Hero ingot — büyük, ön plan, brand accent
     {
-      position: [-0.5, 0.3, 0.5],
-      rotation: [-0.15, 0.4, -0.1],
-      color: COPPER_COLOR,
-      emissive: "#3a1a05",
-      scale: 1,
-      floatIntensity,
-    },
-    // Middle bakır (brand accent)
-    {
-      position: [0.8, -0.2, 0],
-      rotation: [0.1, -0.3, 0.05],
+      position: [0, 0.2, 0.8],
+      rotation: [-0.1, 0.5, -0.05],
       color: COPPER_ACCENT,
       emissive: "#3a1a05",
-      scale: 0.9,
+      scale: 1.3,
       floatIntensity,
+      rotationSpeed: 0.0015,
     },
-    // Background bakır
+    // Sol arka — dark copper
     {
-      position: [-1.2, -0.6, -0.8],
-      rotation: [0.05, 0.6, -0.2],
-      color: COPPER_COLOR,
+      position: [-1.8, -0.3, -0.4],
+      rotation: [0.1, 0.7, -0.15],
+      color: COPPER_DARK,
+      emissive: "#1a0a02",
+      scale: 0.95,
+      floatIntensity: floatIntensity * 0.9,
+      rotationSpeed: 0.0008,
+    },
+    // Sağ üst — primary copper
+    {
+      position: [1.7, 0.7, -0.2],
+      rotation: [-0.2, -0.4, 0.1],
+      color: COPPER_PRIMARY,
+      emissive: "#3a1a05",
+      scale: 0.9,
+      floatIntensity: floatIntensity * 1.1,
+      rotationSpeed: 0.001,
+    },
+    // Sağ alt — primary copper
+    {
+      position: [1.4, -0.8, 0.3],
+      rotation: [0.15, -0.3, -0.1],
+      color: COPPER_PRIMARY,
       emissive: "#2a0f02",
       scale: 0.85,
-      floatIntensity,
+      floatIntensity: floatIntensity * 0.8,
+      rotationSpeed: 0.0012,
     },
-    // Gold accent — small, premium feel
+    // Gold accent — sol üst köşe, premium feel
     {
-      position: [0.4, 0.9, -0.4],
-      rotation: [-0.25, -0.15, 0.1],
+      position: [-1.3, 1.0, 0.5],
+      rotation: [-0.3, 0.2, 0.15],
       color: GOLD_COLOR,
       emissive: "#3a2a05",
-      scale: 0.55,
-      floatIntensity: floatIntensity * 1.2,
+      scale: 0.6,
+      floatIntensity: floatIntensity * 1.4,
+      rotationSpeed: 0.002,
     },
   ];
 
   const cameraConfig: CanvasProps["camera"] = {
-    position: [0, 0.2, 5.2],
-    fov: 35,
+    position: [0, 0.3, 5],
+    fov: 38,
   };
 
   return (
@@ -146,48 +198,66 @@ export default function Hero3DScene() {
       gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
       style={{ width: "100%", height: "100%" }}
     >
-      {/* 3-point lighting (HDR Environment yerine — production-safe) */}
-      <ambientLight intensity={0.5} />
+      {/* Mouse parallax controller */}
+      <ParallaxCamera enabled={parallaxEnabled} />
+
+      {/* Ambient base */}
+      <ambientLight intensity={0.55} />
 
       {/* Key light — top-right warm */}
       <directionalLight
-        position={[4, 5, 3]}
-        intensity={2}
+        position={[4, 6, 3]}
+        intensity={2.2}
         color="#ffe8d0"
         castShadow
         shadow-mapSize={[1024, 1024]}
         shadow-camera-far={15}
-        shadow-camera-left={-5}
-        shadow-camera-right={5}
-        shadow-camera-top={5}
-        shadow-camera-bottom={-5}
+        shadow-camera-left={-6}
+        shadow-camera-right={6}
+        shadow-camera-top={6}
+        shadow-camera-bottom={-6}
       />
 
-      {/* Rim light — back-right cool (metal kontur) */}
+      {/* Rim light — back-left cool (metallic edge) */}
       <directionalLight
-        position={[-4, 3, -3]}
-        intensity={1.2}
+        position={[-5, 3, -3]}
+        intensity={1.4}
         color="#a8c5e0"
       />
 
-      {/* Fill light — front-left soft */}
-      <directionalLight position={[-3, 1, 2]} intensity={0.6} color="#fff5e6" />
+      {/* Fill light — front-bottom soft */}
+      <directionalLight position={[-2, -1, 3]} intensity={0.7} color="#fff5e6" />
 
-      {/* Spot accent — kırmızımsı bakır parıltı */}
-      <pointLight position={[0, 0, 4]} intensity={0.8} color="#ff8c42" distance={8} />
+      {/* Hero spot — bakır parıltı (dramatic glow) */}
+      <pointLight
+        position={[0, 0.5, 3]}
+        intensity={1.4}
+        color="#ff6b1a"
+        distance={10}
+        decay={1.5}
+      />
+
+      {/* Cool back accent */}
+      <pointLight
+        position={[2, 2, -3]}
+        intensity={0.8}
+        color="#3b82f6"
+        distance={8}
+        decay={2}
+      />
 
       {/* Floating ingots */}
       {ingots.map((ingot, idx) => (
         <MetalIngot key={idx} {...ingot} />
       ))}
 
-      {/* Soft contact shadow under ingots */}
+      {/* Soft contact shadow */}
       <ContactShadows
-        position={[0, -1.5, 0]}
-        opacity={0.35}
-        scale={8}
-        blur={2.5}
-        far={3}
+        position={[0, -1.8, 0]}
+        opacity={0.4}
+        scale={10}
+        blur={3}
+        far={4}
       />
     </Canvas>
   );
