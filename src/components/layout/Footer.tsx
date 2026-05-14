@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { siteConfig } from "@/data/site";
 import { contact } from "@/data/contact";
 import { footerGroups, footerAbout, footerLegal } from "@/data/footer";
@@ -13,9 +14,13 @@ export default function Footer() {
           {/* Logo & About */}
           <div className="md:col-span-1">
             <div className="mb-5 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent text-xl font-extrabold text-white">
-                A
-              </div>
+              <Image
+                src="/brand/akarhurda-logo-256.png"
+                alt={`${siteConfig.name} Logo`}
+                width={56}
+                height={56}
+                className="h-14 w-14 object-contain"
+              />
               <span className="text-lg font-extrabold tracking-wide text-white">
                 {siteConfig.shortName}
               </span>
