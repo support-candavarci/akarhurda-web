@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { navigation, ctaButton } from "@/data/navigation";
 import { siteConfig } from "@/data/site";
 import { contact } from "@/data/contact";
@@ -34,12 +35,21 @@ export default function Header() {
     >
       <div className="mx-auto max-w-7xl px-4 md:px-8">
         <div className="flex items-center justify-between">
-          {/* Logo (Sprint 4'te gerçek logo eklenecek) */}
-          <Link href="/" className="flex items-center gap-3 text-white">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent text-xl font-extrabold">
-              A
-            </div>
-            <div className="flex flex-col leading-tight">
+          {/* Logo — Akar Hurda transparent PNG (Sprint 4 final) */}
+          <Link
+            href="/"
+            className="flex items-center gap-3 text-white"
+            aria-label={siteConfig.name}
+          >
+            <Image
+              src="/brand/akarhurda-logo-512.png"
+              alt={`${siteConfig.name} Logo`}
+              width={56}
+              height={56}
+              className="h-12 w-12 shrink-0 object-contain md:h-14 md:w-14"
+              priority
+            />
+            <div className="hidden flex-col leading-tight sm:flex">
               <span className="text-base font-extrabold tracking-wide md:text-lg">
                 {siteConfig.shortName}
               </span>
